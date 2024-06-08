@@ -1,0 +1,230 @@
+<h4 class="mt-4 mb-3">Reglement de l'écolage</h4>
+<div class="row">
+  <div class="col-6">
+    <input
+      autocomplete="off"
+      id="inputVerification"
+      type="text"
+      class="form-control rounded-pill"
+      placeholder="Entrer votre numéro matricule"
+      [(ngModel)]="matriculeVerifier"
+      [ngModelOptions]="{ standalone: true }"
+      (keyup)="getMatricule()"
+    />
+  </div>
+  <p class="col-6 text-success mt-2" *ngIf="nbre === 1">Matricule validé</p>
+  <p class="col-6 text-danger mt-2" *ngIf="nbre === 0">Matricule introuvable</p>
+</div>
+
+<div class="shadow-sm mt-3">
+  <div *ngFor="let elv of tableauVerifier">
+    <h5 class="text-success mb-2">CARTE ECOLAGE</h5>
+    <p class="text-primary">
+      Nom et prénoms :
+      <span>{{ elv.nom + " " + elv.prenoms }}</span>
+    </p>
+    <p class="text-primary">
+      Classe de : <span>{{ elv.nomClasse }}</span>
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="table-responsive mt-4" style="height: 320px">
+    <table class="table table-hover text-center shadow-sm">
+      <thead>
+        <tr>
+          <th scope="col">Libelle</th>
+          <th scope="col">Somme reçue</th>
+          <th scope="col">Somme restante</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of tableauPaiement">
+          <td class="fw-bold">{{ item.libelle }}</td>
+          <td>{{ item.sommeRecue }}</td>
+          <td>{{ item.sommeRestante }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-success mx-2"
+              data-bs-toggle="modal"
+              data-bs-target="#modalPaiement"
+              (click)="showPaiement(item)"
+            >
+              Ouvrir
+            </button>
+          </td>
+        </tr>
+        <ng-container *ngIf="nbre !== 1">
+          <tr>
+            <td colspan="6" class="text-center">
+              Aucune information correspondate
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row mt-2">
+  <h5 class="mb-3">Liste de paiements</h5>
+  <div class="d-flex">
+    <form class="d-flex" role="search">
+      <input
+        id="search"
+        style="width: 600px"
+        type="search"
+        aria-label="Search"
+        class="form-control rounded-pill"
+        [(ngModel)]="searchText"
+        [ngModelOptions]="{ standalone: true }"
+        placeholder="RECHERCHER"
+        (keyup)="rechercher()"
+        autocomplete="off"
+      />
+    </form>
+    <div class="form-floating mb-2 ms-5">
+      <select
+        type="text"
+        id="classe"
+        name="classe"
+        placeholder="classe : "
+        class="form-select"
+        [ngModelOptions]="{ standalone: true }"
+        [(ngModel)]="classe"
+      >
+        <option
+          *ngFor="let classe of tableClasse"
+          value="{{ classe.nomClasse }}"
+        >
+          {{ classe.nomClasse }}
+        </option>
+      </select>
+      <label htmlFor="classe" class="ps-4"> Classe : </label>
+    </div>
+  </div>
+  <div class="table-responsive mt-4" id="tableauEcolage" style="height: 200px">
+    <table class="table table-striped table-hover text-center shadow-sm">
+      <thead>
+        <tr>
+          <th>N°</th>
+          <th>NOM ET PRENOMS</th>
+          <th>CLASSE</th>
+          <th scope="col">D.E</th>
+          <th scope="col">F.G+SPORT</th>
+          <th scope="col">FRAM</th>
+          <th scope="col">DIDEC</th>
+          <th scope="col">ASS</th>
+          <th scope="col">SEPT</th>
+          <th scope="col">OCT</th>
+          <th scope="col">NOV</th>
+          <th scope="col">DEC</th>
+          <th scope="col">JANV</th>
+          <th scope="col">FEV</th>
+          <th scope="col">MARS</th>
+          <th scope="col">AVRIL</th>
+          <th scope="col">MAI</th>
+          <th scope="col">JUIN</th>
+        </tr>
+      </thead>
+      <tbody id="listePaiement">
+        <!-- let item of tableauListePaiement | filterStudents : searchText -->
+        <tr *ngFor="let item of tableauListePaiement | filterClasse : classe">
+          <td>{{ item[0] }}</td>
+          <td>{{ item[1] }}</td>
+          <td>{{ item[2] }}</td>
+          <td>{{ item[7] }}</td>
+          <td>{{ item[9] }}</td>
+          <td>{{ item[17] }}</td>
+          <td>{{ item[6] }}</td>
+          <td>{{ item[3] }}</td>
+          <td>{{ item[16] }}</td>
+          <td>{{ item[15] }}</td>
+          <td>{{ item[14] }}</td>
+          <td>{{ item[5] }}</td>
+          <td>{{ item[10] }}</td>
+          <td>{{ item[8] }}</td>
+          <td>{{ item[13] }}</td>
+          <td>{{ item[4] }}</td>
+          <td>{{ item[12] }}</td>
+          <td>{{ item[11] }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal Du REGLEMENT-->
+<div class="modal" id="modalPaiement" data-bs-backdrop="static" role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title text-danger">Paiement</h4>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          (click)="onClose()"
+        ></button>
+      </div>
+
+      <!-- Modal body -->
+
+      <div class="modal-body">
+        <div class="d-grid p-3 m-3">
+          <h5>{{ libelle }}, Ar {{ tarif }}</h5>
+          <form autocomplete="off">
+            <label for="sommeRecue" class="form-select-label"
+              >Somme recue :
+            </label>
+            <input
+              id="sommeRecue"
+              class="form-control mb-3 mt-3"
+              [ngModelOptions]="{ standalone: true }"
+              [(ngModel)]="sommeRecue"
+              disabled
+            />
+            <label for="sommeRestante" class="form-select-label"
+              >Somme restante :
+            </label>
+            <input
+              autocomplete="off"
+              id="sommeRestante"
+              class="form-control mb-3 mt-3"
+              [ngModelOptions]="{ standalone: true }"
+              [(ngModel)]="sommeRestante"
+              disabled
+            />
+            <label for="sommeVerser" class="form-select-label"
+              >Somme A verser :
+            </label>
+
+            <input
+              id="sommeVerser"
+              class="form-control mt-3"
+              [ngModelOptions]="{ standalone: true }"
+              [(ngModel)]="sommeVerser"
+              (keyup)="verifierSomme()"
+            />
+            <p class="text-danger mt-2" *ngIf="sommeVerser > tarif">
+              Somme verser doit être < Somme Total A payer
+            </p>
+            <button
+              type="button"
+              class="btn btn-sm btn-warning mt-2"
+              (click)="valider()"
+              [disabled]="!isCorrect"
+              data-bs-dismiss="modal"
+            >
+              Valider
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

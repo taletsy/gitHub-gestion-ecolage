@@ -1,0 +1,63 @@
+<style>
+  .form-login {
+    max-width: 330px;
+    padding: 1rem;
+  }
+
+  .form-login .form-floating:focus-within {
+    z-index: 2;
+  }
+
+  .form-login input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    /* background: #050915; */
+    border-bottom-left-radius: 0;
+  }
+
+  .form-login input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    /* background: #050915; */
+    border-top-right-radius: 0;
+  }
+</style>
+<div class="d-flex align-items-center mt-4" style="height: 90vh">
+  <main class="form-login w-100 m-auto border-0 shadow-lg">
+    <form autocomplete="off" class="form">
+      <h1 class="h3 mb-3 fw-normal text-light">Se connecter</h1>
+      <div class="form-floating">
+        <input
+          type="email"
+          class="form-control"
+          id="userName"
+          placeholder="Nom d'utilisateur ou adresse mail"
+          [(ngModel)]="userName"
+          [ngModelOptions]="{ standalone: true }"
+        />
+        <label for="userName">Nom d'utilisateur</label>
+      </div>
+      <div class="form-floating">
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          placeholder="Password"
+          [(ngModel)]="password"
+          [ngModelOptions]="{ standalone: true }"
+        />
+        <label for="password">Mot de passe</label>
+      </div>
+      <p class="text-danger">{{ erroText }}</p>
+      <button
+        class="btn btn-info w-100 py-2"
+        type="button"
+        (click)="onSignIn()"
+      >
+        Connexion
+      </button>
+
+      <p class="mt-5 mb-3 text-body-secondary">© 2023-2024</p>
+    </form>
+  </main>
+</div>
